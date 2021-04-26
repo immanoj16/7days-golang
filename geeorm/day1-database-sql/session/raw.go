@@ -37,6 +37,16 @@ func (s *Session) Raw(sql string, values ...interface{}) *Session {
 	return s
 }
 
+// Exec raw sql with sqlVars
+func (s *Session) Exec() (result sql.Result, err error) {
+	defer s.Clear()
+	log.Info(s.sql.String(), s.sqlVars)
+	if result, err = s.db.Exec(s.sql.String(), s.sqlVars...); err != nil {
+		log.Error(err)
+	}
+	return
+}
+
 // QueryRow gets a record from db
 func (s *Session) QueryRow() *sql.Row {
 	defer s.Clear()
